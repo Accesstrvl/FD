@@ -82,7 +82,7 @@ header {
 
 .nav-links a {
     text-decoration: none;
-    color: white;
+    color: black;
     font-size: 0.95rem;
     font-weight: 500;
     transition: opacity 0.3s;
@@ -90,6 +90,7 @@ header {
 
 .nav-links a:hover {
     opacity: 0.8;
+    color: #2555D8;
 }
 
 .auth-buttons {
@@ -100,14 +101,18 @@ header {
 
 .sign-in {
     text-decoration: none;
-    color: white;
+    color: black;
     font-weight: 500;
     font-size: 0.95rem;
 }
 
+.sign-in:hover {
+    color: #2555D8;
+}
+
 .sign-up-btn {
     background-color: #2555D8;
-    color: white;
+    color:white;
     padding: 10px 24px;
     border-radius: 30px;
     text-decoration: none;
