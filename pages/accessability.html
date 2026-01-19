@@ -23,36 +23,44 @@
             textPrimary: '#111827',
             textSecondary: '#6B7280',
             borderColor: '#E5E7EB',
+            /* ✅ Added for the Navbar */
+            glassTeal: '#E0F7F6',
           }
         }
       }
     }
   </script>
-
-  <style>
-    .navbar {
-        background-color: rgba(14, 165, 164, 0.15) !important;
-        backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(14, 165, 164, 0.3) !important;
-        box-shadow: none !important;
-    }
-    .nav-links a, .sign-in {
-        color: #111827 !important;
-        font-weight: 500;
-    }
-    .menu-icon .bar {
-        background-color: #111827 !important;
-    }
-  </style>
 </head>
 
-<body class="bg-white text-textPrimary">
+<body class="bg-white text-textPrimary font-sans">
 
-  <header class="mx-auto w-full max-w-[1300px]">
-     <div id="navbar-placeholder"></div>
-  </header>
+  <div class="pt-6 pb-2 px-4">
+      <header class="max-w-[1200px] mx-auto bg-glassTeal rounded-full px-8 py-3 flex items-center justify-between shadow-sm">
+        
+        <div class="w-40"> 
+          <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768586288/Frame_2147227578_1_gzuwfw.png" alt="AccessTravel logo" class="w-full h-full object-contain" />
+        </div>
 
-  <main class="max-w-3xl mx-auto px-6 pt-32 pb-20">
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
+          <a href="#" class="text-secondaryTeal font-semibold">Home</a>
+          <a href="explore.html" class="hover:text-secondaryTeal transition">Explore</a>
+          <a href="#" class="hover:text-secondaryTeal transition">How it works</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+          <button class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition">
+             <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560713/tdesign_notification-filled_otbsqs.png" alt="Notifications" class="w-6 h-6"> 
+          </button>
+          
+          <button class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition">
+             <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560723/iconamoon_profile-fill_epysp4.png" alt="Profile" class="w-6 h-6">
+          </button>
+        </div>
+
+      </header>
+  </div>
+
+  <main class="max-w-3xl mx-auto px-6 pt-10 pb-20">
 
     <header class="text-center mb-10">
       <h1 class="text-[32px] font-bold leading-tight">
@@ -150,7 +158,7 @@
 
       <button id="continueHomeBtn" class="w-full bg-[#1E40AF] text-white py-3 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-md">
         Continue to Home
-      </button>
+       </button>
     </div>
   </div>
 
@@ -169,9 +177,18 @@
       modal.classList.remove('hidden'); // Shows the popup
     });
 
-    // 2. Go to Home on Click
+    // 2. SMART REDIRECT LOGIC
     continueBtn.addEventListener('click', () => {
-      window.location.href = "/pages/index.html"; 
+      // Check the flag we set in sign-in/sign-up
+      const status = localStorage.getItem('userStatus');
+
+      if (status === 'new') {
+          // If they just signed up -> Go to New User Dashboard
+          window.location.href = "home-sign-up.html";
+      } else {
+          // If they signed in (or we don't know) -> Go to Returning User Dashboard
+          window.location.href = "home-sign-in.html";
+      }
     });
 
     // Optional: Close if clicking outside
@@ -180,6 +197,7 @@
         modal.classList.add('hidden');
       }
     });
+    
   </script>
 
 </body>

@@ -20,13 +20,13 @@
     theme: {
       extend: {
         colors: {
-          /* ✅ UPDATED: Matches your Figma screenshot exactly */
-          primary: '#1E40AF',   /* The Deep Blue */
-          secondary: '#0EA5A4', /* The Teal/Green */
-          
+          primary: '#1E40AF',   
+          secondary: '#0EA5A4', 
           textPrimary: '#111827',
           textSecondary: '#6B7280',
           borderColor: '#E5E7EB',
+          /* ✅ ADDED THIS MISSING COLOR SO YOUR NAVBAR WORKS */
+          glassTeal: '#E0F7F6', 
         },
         fontFamily: {
           inter: ['Inter', 'sans-serif'],
@@ -38,25 +38,35 @@
     }
   }
 </script>
-  <style>
-    /* Force the navbar to be solid Blue on this page only */
-    .navbar {
-        background-color:rgba(0, 230, 164, 0.15) !important; /* Your Brand Blue */
-        backdrop-filter: none !important;      /* Remove glass blur */
-        border: none !important;               /* Remove glass border */
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Add a nice shadow */
-    }
-
-    /* OPTIONAL: If you need to change link colors to white to be readable on blue */
-    /* .nav-links a { color: white !important; } */
-</style>
 </head>
 
 <body class="font-inter bg-white text-textPrimary">
 
-<header class="mx-auto w-full max-w-[1300px]">
-    <div id="navbar-placeholder"></div>
-</header>
+  <div class="pt-6 pb-2 px-4">
+      <header class="max-w-[1200px] mx-auto bg-glassTeal rounded-full px-8 py-3 flex items-center justify-between shadow-sm">
+        
+        <div class="w-40"> 
+          <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768586288/Frame_2147227578_1_gzuwfw.png" alt="AccessTravel logo" class="w-full h-full object-contain" />
+        </div>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
+          <a href="home-sign-in.html" class="hover:text-secondary font-semibold transition">Home</a>
+          <a href="explore.html" class="text-secondary font-bold">Explore</a>
+          <a href="#" class="hover:text-secondary transition">How it works</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+          <button class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition">
+             <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560713/tdesign_notification-filled_otbsqs.png" alt="Notifications" class="w-6 h-6"> 
+          </button>
+          
+          <button class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition">
+             <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560723/iconamoon_profile-fill_epysp4.png" alt="Profile" class="w-6 h-6">
+          </button>
+        </div>
+
+      </header>
+  </div>
 
   <main class="pt-32 pb-20"> 
 
@@ -110,9 +120,9 @@
                  <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768685419/fluent-emoji-high-contrast_check-mark_m81p07.png" class="w-4 h-4" /> Elevator access
               </li>
             </ul>
-            <button aria-label="View details" class="mt-auto self-start px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:opacity-90">
-              View details
-            </button>
+           <a href="hotel-details.html?id=grand-harbor" class="mt-auto block w-full py-2 rounded-lg bg-secondary text-white text-center text-sm font-medium hover:opacity-90 transition">
+            View details
+          </a>
           </div>
         </article>
 
@@ -128,9 +138,9 @@
               <li class="flex items-center gap-2"><img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768685420/fluent-emoji-high-contrast_check-mark_1_xv9ofr.png" class="w-4 h-4" />Accessible restroom</li>
               <li class="flex items-center gap-2"><img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768685420/fluent-emoji-high-contrast_check-mark_1_xv9ofr.png" class="w-4 h-4" />Communication support</li>
             </ul>
-            <button class="mt-auto self-start px-4 py-2 rounded-md bg-secondary text-white text-sm font-medium">
-              View details
-            </button>
+           <a href="hotel-details.html?id=bella-vita" class="mt-auto block w-full py-2 rounded-lg bg-secondary text-white text-center text-sm font-medium hover:opacity-90 transition">
+            View details
+           </a>
           </div>
         </article>
 
@@ -146,9 +156,9 @@
               <li class="flex items-center gap-2"><img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768685419/fluent-emoji-high-contrast_check-mark_m81p07.png" class="w-4 h-4" />Wide paths</li>
               <li class="flex items-center gap-2"><img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768685419/fluent-emoji-high-contrast_check-mark_m81p07.png" class="w-4 h-4" />Rest areas</li>
             </ul>
-            <button class="mt-auto self-start px-4 py-2 rounded-md bg-primary text-white text-sm font-medium">
-              View details
-            </button>
+          <a href="hotel-details.html?id=rose-gardenia" class="mt-auto block w-full py-2 rounded-lg bg-secondary text-white text-center text-sm font-medium hover:opacity-90 transition">
+            View details
+          </a>
           </div>
         </article>
 
@@ -164,9 +174,9 @@
               <li class="flex items-center gap-2"><img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768685420/fluent-emoji-high-contrast_check-mark_1_xv9ofr.png" class="w-4 h-4" />Changing rooms</li>
               <li class="flex items-center gap-2"><img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768685420/fluent-emoji-high-contrast_check-mark_1_xv9ofr.png" class="w-4 h-4" />Staff assistance</li>
             </ul>
-            <button class="mt-auto self-start px-4 py-2 rounded-md bg-secondary text-white text-sm font-medium">
+            <a href="hotel-details.html?id=giwa-waterpark" class="mt-auto block w-full py-2 rounded-lg bg-secondary text-white text-center text-sm font-medium hover:opacity-90 transition">
               View details
-            </button>
+           </a>
           </div>
         </article>
 
@@ -185,13 +195,13 @@
           Making travel accessible, predictable and safe for people with disabilities worldwide.
           Built with real experiences. Verified by the community.
         </p>
-<a 
-  href="/pages/sign-up.html" 
-  class="inline-block bg-primary text-white px-6 py-3 rounded-full text-sm font-medium shadow-soft hover:opacity-90 transition"
-  aria-label="Create accessibility profile"
->
-  Create Accessibility Profile
-</a>
+        <a 
+          href="/pages/accessability.html" 
+          class="inline-block bg-primary text-white px-6 py-3 rounded-full text-sm font-medium shadow-soft hover:opacity-90 transition"
+          aria-label="Create accessibility profile"
+        >
+          Create Accessibility Profile
+        </a>
       </div>
     </section>
 

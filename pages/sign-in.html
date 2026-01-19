@@ -85,5 +85,19 @@
         />
       </div>
     </div>
+    <script>
+  const form = document.querySelector('form');
+  // Note: Sign-in usually doesn't ask for a name, just email. 
+  // We will use the name stored in memory, or default to "Traveler".
+
+  form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  // ✅ ADD THIS LINE: Mark them as a "returning" user
+  localStorage.setItem('userStatus', 'returning'); 
+
+  window.location.href = "home-sign-in.html"; 
+});
+</script>
   </body>
 </html>
