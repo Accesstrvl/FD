@@ -49,9 +49,9 @@
              <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560713/tdesign_notification-filled_otbsqs.png" alt="Notifications" class="w-6 h-6"> 
           </button>
           
-          <button class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition">
-             <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560723/iconamoon_profile-fill_epysp4.png" alt="Profile" class="w-6 h-6">
-          </button>
+         <a href="profile.html" class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition rounded-full overflow-hidden border border-gray-200">
+    <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560723/iconamoon_profile-fill_epysp4.png" alt="Profile" class="w-full h-full object-cover">
+</a>
         </div>
 
       </header>
@@ -249,11 +249,73 @@
   <script src="../asset/js/components.js"></script>
   <script src="../asset/js/main.js"></script>
 
-  <script>
-    const savedName = localStorage.getItem('accessTravelUser') || "Traveler";
-    document.getElementById("username").textContent = savedName;
-    document.getElementById("welcomeMessage").textContent = "Welcome to AccessTravel";
-    document.getElementById("welcomeSubtext").textContent = "Start planning your accessible journey";
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script type="module">
+    // 1. Import your new Repository
+    import { AuthRepositoryImpl } from '../asset/js/data/repositories/AuthRepositoryImpl.js';
+
+    // 2. Initialize it
+    const authRepo = new AuthRepositoryImpl();
+
+    // 3. Handle the form submit
+    const signUpForm = document.getElementById('signup-form'); // Check your HTML for the correct ID!
+    const errorBox = document.getElementById('error-message'); // Make sure you have this div
+
+    if (signUpForm) {
+        signUpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get values from inputs (Check IDs match your HTML)
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+    // 1. Look for the name in every possible storage key we used
+        const rawName = localStorage.getItem('accessTravelUser') || 
+                        localStorage.getItem('userName');
+        
+        // 2. If we found a name, capitalize it (looks nicer)
+        let displayName = "Traveler";
+        if (rawName) {
+            displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+        }
+
+        // 3. Find the element where the name goes
+        // Make sure your HTML has <span id="user-name-display">Traveler</span>
+        const nameElement = document.getElementById('user-name-display');
+        
+        // 4. Update the text
+        if (nameElement) {
+            nameElement.innerText = displayName;
+        } else {
+            console.warn("Could not find element with id='user-name-display'");
+        }
+
+        
+            // Optional: Check if password match confirmed password
+            // const confirmPassword = document.getElementById('confirm-password').value;
+            // if (password !== confirmPassword) { alert("Passwords don't match"); return; }
+       
+            try {
+                if(errorBox) errorBox.innerText = "Creating account...";
+                
+                // 4. Call your Register function
+                const success = await authRepo.register(name, email, password);
+
+                if (success) {
+                    alert("Account created successfully!");
+                    // Redirect to login page so they can sign in with new account
+                    window.location.href = 'sign-in.html';
+                }
+            } catch (error) {
+                console.error(error);
+                // Extract error message from backend if available
+                const msg = error.response?.data?.message || error.message;
+                if(errorBox) errorBox.innerText = msg;
+                alert("Registration Failed: " + msg);
+            }
+        });
+    }
+</script>
 </body>
 </html>

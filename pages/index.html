@@ -242,5 +242,30 @@
 
     <script src="/asset/js/components.js"></script>
     <script src="/asset/js/main.js"></script>
+    <script src="/asset/js/api.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Look for the name in every possible storage key we used
+        const rawName = localStorage.getItem('accessTravelUser') || 
+                        localStorage.getItem('userName');
+        
+        // 2. If we found a name, capitalize it (looks nicer)
+        let displayName = "Traveler";
+        if (rawName) {
+            displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+        }
+
+        // 3. Find the element where the name goes
+        // Make sure your HTML has <span id="user-name-display">Traveler</span>
+        const nameElement = document.getElementById('user-name-display');
+        
+        // 4. Update the text
+        if (nameElement) {
+            nameElement.innerText = displayName;
+        } else {
+            console.warn("Could not find element with id='user-name-display'");
+        }
+    });
+</script>
   </body>
 </html>
