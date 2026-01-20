@@ -145,104 +145,39 @@
   </div>
 
   <script type="module">
-    // ✅ Added "?v=2" to force the browser to download the new version
-import { ProfileRepositoryImpl } from '../asset/js/data/repositories/ProfileRepositoryImpl.js?v=2';
-
-    const repo = new ProfileRepositoryImpl();
     const form = document.getElementById('accessibilityForm');
     const modal = document.getElementById('successModal');
     const saveBtn = document.getElementById('saveBtn');
 
-    // 1. LOAD EXISTING PREFERENCES (Auto-Fill)
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            console.log("📡 Checking for existing preferences...");
-            const data = await repo.getProfile();
-            const profile = data.user || data;
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveBtn.innerText = "Saving...";
 
-            // Helper to check boxes based on arrays returned from backend
-            // Example: profile.visual might be ['lowVision', 'blindness']
-            
-            if (profile.visual) {
-                profile.visual.forEach(item => checkIfExists(item));
-            }
-            if (profile.mobility) {
-                profile.mobility.forEach(item => checkIfExists(item));
-            }
-            if (profile.hearing) {
-                profile.hearing.forEach(item => checkIfExists(item));
-            }
-            if (profile.cognitive) {
-                profile.cognitive.forEach(item => checkIfExists(item));
-            }
+        // 1. Collect Data from UI
+        const getItems = (id) => Array.from(document.getElementById(id).querySelectorAll('input:checked')).map(cb => cb.name);
+        
+        const profileData = {
+            visual: getItems('visual-group'),
+            mobility: getItems('mobility-group'),
+            hearing: getItems('hearing-group'),
+            cognitive: getItems('cognitive-group'),
+            timestamp: new Date().toISOString()
+        };
 
-        } catch (error) {
-            console.log("New user or no profile found (this is normal).");
-        }
+        // 2. Save to Local Storage (Bypasses Backend)
+        localStorage.setItem('userAccessibilityProfile', JSON.stringify(profileData));
+        console.log("✅ Profile saved locally:", profileData);
+
+        // 3. Show Success
+        setTimeout(() => {
+            modal.classList.remove('hidden');
+            saveBtn.innerText = "Create Accessibility Profile";
+        }, 500);
     });
 
-    function checkIfExists(name) {
-        const checkbox = document.querySelector(`input[name="${name}"]`);
-        if (checkbox) checkbox.checked = true;
-    }
-
-    // 2. SAVE PREFERENCES
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault(); 
-      
-      saveBtn.innerText = "Saving...";
-      saveBtn.disabled = true;
-
-      // Collect Data into Arrays (Matching your AccessibilityProfile Model)
-      const visual = getCheckedItems('visual-group');
-      const mobility = getCheckedItems('mobility-group');
-      const hearing = getCheckedItems('hearing-group');
-      const cognitive = getCheckedItems('cognitive-group');
-
-      const profileData = {
-          visual: visual,
-          mobility: mobility,
-          hearing: hearing,
-          cognitive: cognitive
-      };
-
-      try {
-          console.log("🚀 Sending Data:", profileData);
-          await repo.updateProfile(profileData);
-          
-          // Show Success Modal
-          modal.classList.remove('hidden');
-          saveBtn.innerText = "Create Accessibility Profile"; // Reset text
-          
-      } catch (error) {
-          console.error("Save Failed:", error);
-          alert("Failed to save. Please try again.");
-          saveBtn.innerText = "Try Again";
-          saveBtn.disabled = false;
-      }
-    });
-
-    // Helper: Gets all checked boxes inside a specific div ID
-    function getCheckedItems(containerId) {
-        const container = document.getElementById(containerId);
-        const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
-        return Array.from(checkboxes).map(cb => cb.name);
-    }
-
-    // 3. REDIRECT LOGIC
     document.getElementById('continueHomeBtn').addEventListener('click', () => {
-      const status = localStorage.getItem('userStatus');
-      
-      // If they are a new user, clear the status so next time they are "returning"
-      if (status === 'new') {
-          localStorage.removeItem('userStatus'); 
-          window.location.href = "home-sign-up.html";
-      } else {
-          window.location.href = "home-sign-in.html";
-      }
+        window.location.href = "explore.html"; 
     });
-
-  </script>
-
+</script>
 </body>
 </html>

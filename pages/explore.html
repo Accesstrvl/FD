@@ -43,29 +43,45 @@
 <body class="font-inter bg-white text-textPrimary">
 
   <div class="pt-6 pb-2 px-4">
-      <header class="max-w-[1200px] mx-auto bg-glassTeal rounded-full px-8 py-3 flex items-center justify-between shadow-sm">
-        
-        <div class="w-40"> 
-          <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768586288/Frame_2147227578_1_gzuwfw.png" alt="AccessTravel logo" class="w-full h-full object-contain" />
-        </div>
+      <header class="max-w-[1200px] mx-auto bg-glassTeal rounded-full px-6 md:px-8 py-3 flex items-center justify-between shadow-sm relative">
+  
+  <div class="w-32 md:w-40"> 
+    <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768586288/Frame_2147227578_1_gzuwfw.png" alt="AccessTravel logo" class="w-full h-full object-contain" />
+  </div>
 
-        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
-          <a href="home-sign-in.html" class="hover:text-secondary font-semibold transition">Home</a>
-          <a href="explore.html" class="text-secondary font-bold">Explore</a>
-          <a href="#" class="hover:text-secondary transition">How it works</a>
-        </nav>
+  <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
+    <a href="home-sign-in.html" class="hover:text-secondary font-semibold transition">Home</a>
+    <a href="explore.html" class="text-secondary font-bold">Explore</a>
+    <a href="#" class="hover:text-secondary transition">How it works</a>
+  </nav>
 
-        <div class="flex items-center gap-4">
-          <button class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition">
-             <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560713/tdesign_notification-filled_otbsqs.png" alt="Notifications" class="w-6 h-6"> 
-          </button>
-          
-       <a href="profile.html" class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition rounded-full overflow-hidden border border-gray-200">
-    <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560723/iconamoon_profile-fill_epysp4.png" alt="Profile" class="w-full h-full object-cover">
-</a>
-        </div>
+  <div class="flex items-center gap-3">
+    <div class="hidden md:flex items-center gap-4">
+        <button class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition">
+            <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560713/tdesign_notification-filled_otbsqs.png" alt="Notifications" class="w-6 h-6"> 
+        </button>
+        <a href="profile.html" class="w-9 h-9 flex items-center justify-center hover:opacity-80 transition rounded-full overflow-hidden border border-gray-200">
+            <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560723/iconamoon_profile-fill_epysp4.png" alt="Profile" class="w-full h-full object-cover">
+        </a>
+    </div>
 
-      </header>
+    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700 focus:outline-none">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-white border border-borderColor rounded-2xl p-6 shadow-xl z-50 flex flex-col gap-4 md:hidden">
+    <a href="home-sign-in.html" class="text-lg font-semibold text-gray-800 border-b pb-2">Home</a>
+    <a href="explore.html" class="text-lg font-semibold text-secondary border-b pb-2">Explore</a>
+    <a href="#" class="text-lg font-semibold text-gray-800 border-b pb-2">How it works</a>
+    <a href="profile.html" class="flex items-center gap-3 text-lg font-semibold text-gray-800 pt-2">
+        <img src="https://res.cloudinary.com/djyajhlmr/image/upload/v1768560723/iconamoon_profile-fill_epysp4.png" class="w-8 h-8 rounded-full">
+        My Profile
+    </a>
+  </div>
+</header>
   </div>
 
   <main class="pt-32 pb-20"> 
@@ -211,6 +227,62 @@
 
   <script src="/asset/js/components.js"></script>
   <script src="/asset/js/main.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    async function loadAndFilterPlaces() {
+        const grid = document.getElementById('places-grid');
+        if (!grid) return; // Stop if the grid isn't on the page
 
+        try {
+            // 1. Get saved needs from LocalStorage
+            const saved = localStorage.getItem('userNeeds');
+            const myNeeds = saved ? JSON.parse(saved) : [];
+            
+            // 2. Fetch places - Try /api/places first, then /places
+            let response;
+            try {
+                response = await axios.get('https://accesstrvlbd-apiv2.onrender.com/api/places');
+            } catch (e) {
+                response = await axios.get('https://accesstrvlbd-apiv2.onrender.com/places');
+            }
+            
+            const allPlaces = response.data.data || response.data;
+
+            // 3. Filter using the LocalStorage needs
+            const filtered = allPlaces.filter(place => {
+                if (myNeeds.length === 0) return true;
+                const acc = place.accessibility || {};
+                
+                return myNeeds.some(need => {
+                    if (need === 'manualWheelchair' || need === 'electricWheelchair') return acc.wheelchairAccessible;
+                    if (need === 'lowVision' || need === 'blindness') return acc.brailleSignage;
+                    if (need === 'deaf' || need === 'hearingAids') return acc.hearingAssistance;
+                    return false;
+                });
+            });
+
+            // 4. Render
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-white border rounded-xl overflow-hidden shadow-sm flex flex-col h-full">
+                    <img src="${p.photos?.[0]?.url || p.photos?.[0] || 'https://via.placeholder.com/400x200'}" class="h-40 w-full object-cover">
+                    <div class="p-4 flex-grow flex flex-col">
+                        <h2 class="font-bold text-lg">${p.name}</h2>
+                        <p class="text-gray-500 text-sm mb-4">${p.location?.city || 'Lagos'}</p>
+                        <a href="hotel-details.html?id=${p._id}" class="mt-auto block w-full py-2 bg-[#0EA5A4] text-white text-center rounded-lg hover:opacity-90 transition">
+                            View details
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (err) {
+            console.error("Critical error:", err);
+            if (grid) grid.innerHTML = "<p class='col-span-full text-center py-10'>Could not load places. Please check backend connection.</p>";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAndFilterPlaces);
+</script>
 </body>
 </html>

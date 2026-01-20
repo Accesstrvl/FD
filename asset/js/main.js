@@ -44,3 +44,22 @@ document.querySelectorAll('.nav-links a').forEach(link => {
         menuIcon.classList.remove('open');
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuPath = document.getElementById('menu-icon-path');
+
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            
+            // Change icon from hamburger to X
+            if (!isHidden) {
+                menuPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+            } else {
+                menuPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            }
+        });
+    }
+});
